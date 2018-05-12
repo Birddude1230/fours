@@ -8,7 +8,6 @@ struct eqn {
 };
 
 int merge(struct eqn a, struct eqn b, struct eqn *o){
-	o = malloc(sizeof(struct eqn)* 4);
 	sprintf(o -> rep, "(%s) + (%s)", a.rep, b.rep);
 	o -> eval = a.eval + b.eval;
 	sprintf(o[1].rep, "(%s) - (%s)", a.rep, b.rep);
@@ -16,13 +15,13 @@ int merge(struct eqn a, struct eqn b, struct eqn *o){
 	sprintf(o[2].rep, "(%s) / (%s)", a.rep, b.rep);
 	o[2].eval = a.eval / b.eval;
 	sprintf(o[3].rep, "(%s) * (%s)", a.rep, b.rep);
-	o[4].eval = a.eval * b.eval;
+	o[3].eval = a.eval * b.eval;
 	return 4;
 }
 
 int main(int argc, char **argv){
 	int count[256];	
-	struct eqn *o;
+	struct eqn o[4];
 	struct eqn a;
 	struct eqn b;
 	a.rep[0] = '4'; a.rep[1] = '\0';
@@ -31,7 +30,6 @@ int main(int argc, char **argv){
 	b.eval = 4;
 	merge(a, b, o);
 	for(int i=0; i<4; i++){
-		printf("%s = %d", o[i]->rep, o[i]->eval);
+		printf("%s = %d\n", o[i].rep, o[i].eval);
 	}
-}
 }
