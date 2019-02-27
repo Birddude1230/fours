@@ -2,11 +2,13 @@
 #include <stdlib.h>
 
 struct eqn {
+	//Stores all or part of an formula, as well as its value
 	char rep[26]; //((4) + (4)) + ((4) + (4))
 	int eval;
 };
 
 struct listelem {
+	//The linked list link used for counting equal formulas
 	int val;
 	int count;
 	struct listelem *next;
@@ -15,6 +17,7 @@ struct listelem {
 struct listelem *head;
 
 void insert(struct eqn i){
+	//Insert full equation into the linked list, preserving order
 	struct listelem *e = malloc(sizeof(struct listelem));
 	e->val = i.eval;
 	e->count = 1;
@@ -45,14 +48,21 @@ void insert(struct eqn i){
 }
 
 void printlist(){
+	//Walk and print the linked list
 	struct listelem *t = head;
+	int ct = 0;
 	printf("value\t:ways to make it\n");
 	while(t != NULL){
+		ct += t->count;
 		printf("%d\t:%d\n", t->val, t->count);
 		t = t->next;
 	}
+	printf("Total\t:%d\n", ct);
 }
+
 int merge(struct eqn a, struct eqn b, struct eqn *o){
+	//Given two formulas, output an array of new formulas
+	//These formulas are formed by joining the subformulas with operators
 	sprintf(o -> rep, "(%s) + (%s)", a.rep, b.rep);
 	o -> eval = a.eval + b.eval;
 	sprintf(o[1].rep, "(%s) - (%s)", a.rep, b.rep);
@@ -69,12 +79,15 @@ int merge(struct eqn a, struct eqn b, struct eqn *o){
 }
 
 int main(int argc, char **argv){
+	//Build the possible equations
 	struct eqn o[4];
 	struct eqn a;
 	a.rep[0] = '4'; a.rep[1] = '\0';
 	a.eval = 4;
 	merge(a, a, o);
+	//o now contains all equations with two fours in them
 	struct eqn z[4][4][4];
+	//z[a][b][c] is the cth element of the list of combinations of elements of o at index a and b
 	for (int i=0; i<4; i++){
 		for (int j=0; j<4; j++){
 			merge(o[i], o[j], z[i][j]);
@@ -85,7 +98,9 @@ int main(int argc, char **argv){
 		}
 	}
 	struct eqn x[4][4];
+	//x[a][b] is the bth element of the list of combinations of o[a] and another 4
 	struct eqn y[4][4][4];
+	//y stores combinations of x with a fourth four
 	for (int i=0; i<4; i++){
 		merge(o[i], a, x[i]);
 		for (int j=0; j<4; j++){
