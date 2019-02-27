@@ -1,5 +1,6 @@
 # fours
 A fours problem brute forcer, in C.
+
 [Usage](##Usage)
 
 ## The fours problem
