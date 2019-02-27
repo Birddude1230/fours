@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "ops.c"
+
+#define MAX_EQN_SIZE 255
+#define ERR_OVERSIZE -9999
+#define ERR_ZDIV -9998
 
 struct eqn {
 	//Stores all or part of an formula, as well as its value
-	char rep[26]; //((4) + (4)) + ((4) + (4))
+	char rep[MAX_EQN_SIZE]; //((4) + (4)) + ((4) + (4))
 	int eval;
 };
 
@@ -15,6 +20,8 @@ struct listelem {
 };
 
 struct listelem *head;
+
+
 
 void insert(struct eqn i){
 	//Insert full equation into the linked list, preserving order
