@@ -42,7 +42,8 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 			prec = strtol(arg, NULL, 10);
 			break;
 		default:
-			return ARGP_ERR_UNKNOWN;
+			fprinf(stderr, "Unknown option %c! Use --help for help.\n");
+			exit(1);
 	}
 	return 0;
 }
@@ -51,12 +52,12 @@ static struct argp argp = {options, parse_opt, 0, doc};
 
 void printlist(){
 	//Walk and print the linked list
-	struct listelem *t = head;
+	struct agg_ele *t = agg_list;
 	int ct = 0;
 	printf("value\t:ways to make it\n");
 	while(t != NULL){
 		ct += t->count;
-		printf("%d\t:%d\n", t->val, t->count);
+		mpfr_printf("%.2f\t:%d\n", t->val, t->count);
 		t = t->next;
 	}
 	printf("Total\t:%d\n", ct);
@@ -70,16 +71,22 @@ int main(int argc, char **argv){
 	arguments.ops = "+-/*n";
 	arguments.prec = PRECISION;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
-	
-	char mode;
+
+	//Initialize the one-value equations
+	char *valoc = arguments.input;
+	char *ctr = valoc;
 	int nvals = 0;
 
-	error_t err = argp_parse(argp, argc, argv, NULL, NULL, NULL);
-	if (err){fprintf(stderr, "Argument parsing error!\n");exit(1);}
-	//Initialize the one-value equations
+	do {
+		nvals += 1;
+		ctr = strchr(',', ctr);
+		
+	} while (ctr != NULL);
+
 	for (int i=0;i<nvals;i++){
 		struct eqn neq;
 		mpfr_init2(neq.eval, prec);
+		mpfr_strtofr(neq.eval, valoc, &valoc, 10, rnd);
 		unsigned char exc[nvals/8 + 1];
 		exc[i/8] = 1 << (i % 8);
 		sprintf(neq.rep, "%d", vals[i]);
@@ -90,7 +97,7 @@ int main(int argc, char **argv){
 	for (int i=0;i<nvals;i++){
 		add_unary(res[i], res[i]);
 		for (int j=0;j<=i;j++){
-			if (check_exclusive(res[j], res[i-j])){
+			if (check_exclusive(nval, res[j], res[i-j])){
 				add_binary(res[i], res[j], res[i-j]);
 			}
 		}

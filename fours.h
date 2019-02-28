@@ -8,6 +8,8 @@
 #define MAX_EQN_SIZE 256
 #define PRECISION 64
 
+mpfr_rnd_t rnd = MPFR_RNDN;
+
 typedef struct bi_op{
 	char rep[MAX_OP_STR];
 	float (*opfunc)(float, float);
