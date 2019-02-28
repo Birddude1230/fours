@@ -1,13 +1,10 @@
-#include "ops.h"
 #include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "fours.h"
 
 void add_bi_op(char* rep, float(*opfunc)(float, float)){
 	biop *nop = malloc(sizeof(biop));
 	if (nop == NULL){
-		fprintf(stderr, "Could not allocate memory for operator!");
-		exit(1);
+		perror("Malloc");
 	}
 	strncpy(nop->rep, rep, MAX_OP_STR-1);
 	nop->rep[MAX_OP_STR] = '\0';
@@ -27,8 +24,7 @@ void add_bi_op(char* rep, float(*opfunc)(float, float)){
 void add_un_op(char* rep, float(*opfunc)(float)){
 	unop *nop = malloc(sizeof(unop));
 	if (nop == NULL){
-		fprintf(stderr, "Could not allocate memory for operator!");
-		exit(1);
+		perror("Malloc");
 	}
 	strncpy(nop->rep, rep, MAX_OP_STR-1);
 	nop->rep[MAX_OP_STR] = '\0';

@@ -1,32 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stderr.h>
 #include <argp.h>
-#include "ops.c"
 
-#define MAX_EQN_SIZE 256
-#define PRECISION 64
+#include "fours.h"
+#include "ops.c"
+#include "proc.c"
 
 mpfr_prec_t prec = PRECISION;
 
 const char *prog_ver = "fours 0.0";
 static char doc[] = "A bruteforcer for the generalized fours problem";
-
-struct eqn {
-	//Stores all or part of an formula, as well as its value
-	char rep[MAX_EQN_SIZE]; 
-	mpfr_t eval;
-	unsigned char *exc;
-};
-
-struct listelem {
-	//The linked list link used for counting equal formulas
-	mpfr_t val;
-	int count;
-	struct listelem *next;
-};
-
-struct listelem *head;
 
 static struct argp_option options[] = {
 	{"input", 'i', "INPUT", 0, "Specify starting numbers as CSV"},
@@ -67,38 +48,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 }
 
 static struct argp argp = {options, parse_opt, 0, doc};
-
-void insert(struct eqn i){
-	//Insert full equation into the linked list, preserving order
-	struct listelem *e = malloc(sizeof(struct listelem));
-	mpfr_init2(e->val, prec);
-	e->val = i.eval;
-	e->count = 1;
-	e->next = NULL;
-	if (head == NULL){
-		head = e;
-	} else {
-		struct listelem *t = head;
-		struct listelem *prev;
-		while (t->val < i.eval && t->next != NULL){
-			prev = t;
-			t = t->next;
-		}
-		if (t-> val < i.eval){
-			t->next = e;
-		} else if (t->val == i.eval){
-			free(e);
-			t->count++;
-		} else {
-			e->next = t;
-			if(head != t){
-				prev->next = e;
-			} else {
-				head = e;
-			}
-		}
-	}
-}
 
 void printlist(){
 	//Walk and print the linked list
