@@ -5,7 +5,7 @@
 #include "ops.c"
 
 #define MAX_EQN_SIZE 256
-#define PRECISION 50
+#define PRECISION 64
 
 mpfr_prec_t prec = PRECISION;
 
@@ -29,17 +29,17 @@ struct listelem {
 struct listelem *head;
 
 static struct argp_option options[] = {
-	{"square", 's', 0, 0, "Repeats the first input number that many times (e.x., four fours). Not functional without the input option"},
 	{"input", 'i', "INPUT", 0, "Specify starting numbers as CSV"},
 	{"ops", 'o', "OPS", 0, "Specify allowed operators via a string of operator symbols"},
+	{"precision", 'p', "BITS", 0, "Specify the precision, in bits, of equation values (default: PRECISION)"},
 	{"hide-eqns", 'E', 0, 0, "Do not display the list of equations"},
 	{"hide-vals", 'V', 0, 0, "Do not display the list of values and equation counts"},
 	{0}
 }
 
 struct arguments {
-	int square, heq, hval;
-	char *input, ops;
+	int heq, hval;
+	char *input, ops, prec;
 }
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state){
@@ -51,20 +51,22 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 		case 'V':
 			arguments->hval = 1;
 			break;
-		case 's':
-			arguments->square = 1;
-			break;
 		case 'i':
 			arguments->input = arg;
 			break;
 		case 'o':
-			argument->ops = arg;
+			arguments->ops = arg;
+			break;
+		case 'p':
+			prec = strtol(arg, NULL, 10);
 			break;
 		default:
 			return ARGP_ERR_UNKNOWN;
 	}
 	return 0;
 }
+
+static struct argp argp = {options, parse_opt, 0, doc};
 
 void insert(struct eqn i){
 	//Insert full equation into the linked list, preserving order
@@ -112,7 +114,14 @@ void printlist(){
 }
 
 int main(int argc, char **argv){
-
+	struct arguments arguments;
+	arguments.heq = 0;
+	arguments.hval = 0;
+	arguments.input = "4";
+	arguments.ops = "+-/*n";
+	arguments.prec = PRECISION;
+	argp_parse(&argp, argc, argv, 0, 0, &arguments);
+	
 	char mode;
 	int nvals = 0;
 
