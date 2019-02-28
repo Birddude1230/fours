@@ -1,5 +1,6 @@
 #include "ops.h"
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 void add_bi_op(char* rep, float(*opfunc)(float, float)){
