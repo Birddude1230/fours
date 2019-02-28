@@ -1,7 +1,7 @@
 #include <string.h>
 #include "fours.h"
 
-void add_bi_op(char* rep, float(*opfunc)(float, float)){
+void add_bi_op(char* rep, void(*opfunc)(mpfr_t, mpfr_t, mpfr_t)){
 	biop *nop = malloc(sizeof(biop));
 	if (nop == NULL){
 		perror("Malloc");
@@ -21,7 +21,7 @@ void add_bi_op(char* rep, float(*opfunc)(float, float)){
 	}
 }
 
-void add_un_op(char* rep, float(*opfunc)(float)){
+void add_un_op(char* rep, void(*opfunc)(mpfr_t)){
 	unop *nop = malloc(sizeof(unop));
 	if (nop == NULL){
 		perror("Malloc");
@@ -41,20 +41,20 @@ void add_un_op(char* rep, float(*opfunc)(float)){
 	}
 }
 
-float func_add(float a, float b){
-	return a + b;
+void func_add(mpfr_t r, mpfr_t a, mpfr_t b){
+	mpfr_add(r, a, b, rnd);
 }
-float func_sub(float a, float b){
-	return a - b;
+void func_sub(mpfr_t r, mpfr_t a, mpfr_t b){
+	mpfr_sub(r, a, b, rnd);
 }
-float func_mult(float a, float b){
-	return a * b;
+void func_mult(mpfr_t r, mpfr_t a, mpfr_t b){
+	mpfr_mul(r, a, b, rnd);
 }
-float func_div(float a, float b){
-	return a / b;
+void func_div(mpfr_t r, mpfr_t a, mpfr_t b){
+	mpfr_div(r, a, b, rnd);
 }
-float func_neg(float a){
-	return -a;
+void func_neg(mpfr_t a){
+	mpfr_neg(a, a, rnd);
 }
 
 void load_ops(char *subs){

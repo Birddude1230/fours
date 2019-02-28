@@ -12,7 +12,7 @@ mpfr_rnd_t rnd = MPFR_RNDN;
 
 typedef struct bi_op{
 	char rep[MAX_OP_STR];
-	float (*opfunc)(float, float);
+	void (*opfunc)(mpfr_t, mpfr_t, mpfr_t);
 	struct bi_op* next;
 } biop;
 
@@ -20,7 +20,7 @@ biop* bi_head;
 
 typedef struct un_op{
 	char rep[MAX_OP_STR];
-	float (*opfunc)(float);
+	void (*opfunc)(mpfr_t);
 	struct un_op* next;
 } unop;
 

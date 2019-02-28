@@ -72,6 +72,7 @@ int main(int argc, char **argv){
 	arguments.prec = PRECISION;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
+	load_ops(arguments.ops);
 	//Initialize the one-value equations
 	char *valoc = arguments.input;
 	char *ctr = valoc;
