@@ -12,7 +12,7 @@ void insert(struct eqn i){
     //Insert full equation into the linked list, preserving order
     struct listelem *e = malloc(sizeof(struct listelem));
     mpfr_init2(e->val, prec);
-    e->val = i.eval;
+    mpfr_set(e->val, i.eval, rnd);
     e->count = 1;
     e->next = NULL;
     if (head == NULL){
@@ -20,13 +20,13 @@ void insert(struct eqn i){
     } else {
         struct listelem *t = head;
         struct listelem *prev;
-        while (t->val < i.eval && t->next != NULL){
+        while (mpfr_less_p(t->val, i.eval) && t->next != NULL){
             prev = t;
             t = t->next;
         }
-        if (t-> val < i.eval){
+        if (mpfr_less_p(t-> val, i.eval)){
             t->next = e;
-        } else if (t->val == i.eval){
+        } else if (mpfr_equal_p(t->val, i.eval)){
             free(e);
             t->count++;
         } else {
