@@ -9,6 +9,7 @@
 #define PRECISION 64
 
 mpfr_rnd_t rnd = MPFR_RNDN;
+mpfr_prec_t prec = PRECISION;
 
 typedef struct bi_op{
 	char rep[MAX_OP_STR];

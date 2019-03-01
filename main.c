@@ -4,8 +4,6 @@
 #include "ops.c"
 #include "proc.c"
 
-mpfr_prec_t prec = PRECISION;
-
 const char *prog_ver = "fours 0.0";
 static char doc[] = "A bruteforcer for the generalized fours problem";
 
