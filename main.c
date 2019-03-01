@@ -96,9 +96,7 @@ int main(int argc, char **argv){
 	for (int i=0;i<nvals;i++){
 		add_unary(res[i], res[i]);
 		for (int j=0;j<=i;j++){
-			if (check_exclusive(nval, res[j], res[i-j])){
-				add_binary(res[i], res[j], res[i-j]);
-			}
+			add_binary(res[i], res[j], res[i-j]);
 		}
 	}	
 	printlist();

@@ -1,7 +1,16 @@
 #include "fours.h"
 
+int check_exclusive(struct eqn *a, struct eqn *b){
+	for 
+}
+
 void add_unary(struct eqn *out, struct eqn *a){
-	pass;
+	//for i in list at a
+	//apply each op and append new
+	struct eqn *nhead;
+	struct eqn *curr = a;
+	while (curr->next != NULL){
+		
 }
 
 void add_binary(struct eqn *out, struct eqn *a, struct eqn *b){
