@@ -15,7 +15,6 @@ static struct argp_option options[] = {
 	{"precision", 'p', "BITS", 0, "Specify the precision, in bits, of equation values (default: PRECISION)"},
 	{"hide-eqns", 'E', 0, 0, "Do not display the list of equations"},
 	{"hide-vals", 'V', 0, 0, "Do not display the list of values and equation counts"},
-	{0}
 };
 
 struct arguments{
@@ -43,9 +42,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 		case 'p':
 			prec = strtol(arg, NULL, 10);
 			break;
+		case ARGP_KEY_ARG:
+			argp_usage (state);
+			break;
+		case ARGP_KEY_END:
+			printf("Done parsing\n");
+			break;
 		default:
-			fprintf(stderr, "Unknown option %c! Use --help for help.\n", key);
-			exit(1);
+			return ARGP_ERR_UNKNOWN;
 	}
 	return 0;
 }
@@ -76,7 +80,7 @@ int main(int argc, char **argv){
 	struct arguments arguments;
 	arguments.heq = 0;
 	arguments.hval = 0;
-	strncpy(arguments.input, "4", MAX_INP);
+	strncpy(arguments.input, "4,4,4,4", MAX_INP);
 	strncpy(arguments.ops, "+-/*n", MAX_OP_STR);
 	strncpy(arguments.prec, "PRECISION", MAX_INP);
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);

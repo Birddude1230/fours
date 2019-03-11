@@ -53,6 +53,7 @@ void add_binary(struct eqn *out, struct eqn *a, struct eqn *b){
 					neweq->exc[i] = curr->exc[i];
 				}
 				snprintf(neweq->rep, MAX_EQN_SIZE, cop->rep, curr->rep);
+				printf("%s", neweq->rep);
 				mpfr_init_set(neweq->eval, curr->eval, rnd);
 				cop->opfunc(neweq->eval, curr->eval, other->eval);
 				neweq->next = out;
