@@ -2,8 +2,6 @@
 #include <string.h>
 
 #include "fours.h"
-#include "ops.c"
-#include "proc.c"
 
 mpfr_rnd_t rnd = MPFR_RNDN;
 mpfr_prec_t prec = PRECISION;

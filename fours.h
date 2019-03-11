@@ -2,7 +2,7 @@
 #define FOURS_H
 #include <stdio.h>
 #include <stdlib.h>
-#include <mpfr.h>
+#include </usr/include/mpfr.h>
 
 #define MAX_OP_STR 32
 #define MAX_EQN_SIZE 256
@@ -44,5 +44,9 @@ struct agg_ele {
 struct agg_ele *agg_list;
 
 int sig_bytes;
+
+void load_ops(char *);
+void add_unary(struct eqn *, struct eqn *);
+void add_binary(struct eqn *, struct eqn *, struct eqn *);
 
 #endif /* FOURS_H */
