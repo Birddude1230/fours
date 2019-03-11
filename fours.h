@@ -31,6 +31,7 @@ struct eqn {
 	char rep[MAX_EQN_SIZE];
 	mpfr_t eval;
 	unsigned char *exc;
+	struct eqn *next;
 };
 
 struct agg_ele {

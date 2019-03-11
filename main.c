@@ -48,7 +48,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 
 static struct argp argp = {options, parse_opt, 0, doc};
 
-void printlist(){
+void printlist(struct eqn *ceq){
+	while (ceq != NULL){
+		mpfr_printf("%.2f=\t%s", ceq->eval, ceq->rep);
+		ceq = ceq -> next;
+	}
+}
+
+void aggregate(){
 	//Walk and print the linked list
 	struct agg_ele *t = agg_list;
 	int ct = 0;
@@ -84,6 +91,9 @@ int main(int argc, char **argv){
 	
 	sig_bytes = nvals/8 + 1
 `
+	struct eqn *eqnh;
+	struct eqn *res[nvals];
+
 	for (int i=0;i<nvals;i++){
 		struct eqn neq;
 		mpfr_init2(neq.eval, prec)
@@ -95,7 +105,11 @@ int main(int argc, char **argv){
 		exc[i/8] = 1 << (i % 8);
 		sprintf(neq.rep, "%d", vals[i]);
 		neq.rep[MAX_EQN_SIZE-1] = '\0';
+		neq.next = eqnh;
+		eqnh = &neq;
+		res[i] = struct eqn *a;
 	}
+	res[0] = eqnh;
 
 	//Combine equations to get all equations
 	for (int i=0;i<nvals;i++){
@@ -104,5 +118,5 @@ int main(int argc, char **argv){
 			add_binary(res[i], res[j], res[i-j]);
 		}
 	}	
-	printlist();
+	printlist(res[nvals-1]);
 }
