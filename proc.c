@@ -1,7 +1,12 @@
 #include "fours.h"
 
 int check_exclusive(struct eqn *a, struct eqn *b){
-	for 
+	for (int i=0;i<sig_bytes;i++){
+		if (a->exc[i] & b->exc[i]){
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void add_unary(struct eqn *out, struct eqn *a){

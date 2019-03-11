@@ -41,4 +41,6 @@ struct agg_ele {
 
 struct agg_ele *agg_list;
 
+int sig_bytes;
+
 #endif /* FOURS_H */

@@ -81,12 +81,17 @@ int main(int argc, char **argv){
 		ctr = strchr(',', ctr);
 		
 	} while (ctr != NULL);
-
+	
+	sig_bytes = nvals/8 + 1
+`
 	for (int i=0;i<nvals;i++){
 		struct eqn neq;
-		mpfr_init2(neq.eval, prec);
+		mpfr_init2(neq.eval, prec)
 		mpfr_strtofr(neq.eval, valoc, &valoc, 10, rnd);
-		unsigned char exc[nvals/8 + 1];
+		unsigned char exc[sig_bytes];
+		for (int j=0;j<sig_bytes; j++){
+			exc[j] = 0;
+		}
 		exc[i/8] = 1 << (i % 8);
 		sprintf(neq.rep, "%d", vals[i]);
 		neq.rep[MAX_EQN_SIZE-1] = '\0';
