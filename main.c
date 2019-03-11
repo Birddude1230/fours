@@ -1,8 +1,12 @@
 #include <argp.h>
+#include <string.h>
 
 #include "fours.h"
 #include "ops.c"
 #include "proc.c"
+
+mpfr_rnd_t rnd = MPFR_RNDN;
+mpfr_prec_t prec = PRECISION;
 
 const char *prog_ver = "fours 0.0";
 static char doc[] = "A bruteforcer for the generalized fours problem";
@@ -14,12 +18,14 @@ static struct argp_option options[] = {
 	{"hide-eqns", 'E', 0, 0, "Do not display the list of equations"},
 	{"hide-vals", 'V', 0, 0, "Do not display the list of values and equation counts"},
 	{0}
-}
+};
 
-struct arguments {
+struct arguments{
 	int heq, hval;
-	char *input, ops, prec;
-}
+	char input[MAX_INP];
+	char ops[MAX_OP_STR];
+	char prec[MAX_INP];
+};
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state){
 	struct arguments *arguments = state->input;
@@ -31,16 +37,16 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state){
 			arguments->hval = 1;
 			break;
 		case 'i':
-			arguments->input = arg;
+			strncpy(arguments->input, arg, MAX_INP);
 			break;
 		case 'o':
-			arguments->ops = arg;
+			strncpy(arguments->ops, arg, MAX_OP_STR);
 			break;
 		case 'p':
 			prec = strtol(arg, NULL, 10);
 			break;
 		default:
-			fprinf(stderr, "Unknown option %c! Use --help for help.\n");
+			fprintf(stderr, "Unknown option %c! Use --help for help.\n", key);
 			exit(1);
 	}
 	return 0;
@@ -72,9 +78,9 @@ int main(int argc, char **argv){
 	struct arguments arguments;
 	arguments.heq = 0;
 	arguments.hval = 0;
-	arguments.input = "4";
-	arguments.ops = "+-/*n";
-	arguments.prec = PRECISION;
+	strncpy(arguments.input, "4", MAX_INP);
+	strncpy(arguments.ops, "+-/*n", MAX_OP_STR);
+	strncpy(arguments.prec, "PRECISION", MAX_INP);
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	load_ops(arguments.ops);
@@ -85,29 +91,28 @@ int main(int argc, char **argv){
 
 	do {
 		nvals += 1;
-		ctr = strchr(',', ctr);
+		ctr = strchr(ctr, ',');
 		
 	} while (ctr != NULL);
 	
-	sig_bytes = nvals/8 + 1
-`
+	sig_bytes = nvals/8 + 1;
+
 	struct eqn *eqnh;
 	struct eqn *res[nvals];
 
 	for (int i=0;i<nvals;i++){
 		struct eqn neq;
-		mpfr_init2(neq.eval, prec)
+		mpfr_init2(neq.eval, prec);
 		mpfr_strtofr(neq.eval, valoc, &valoc, 10, rnd);
-		unsigned char exc[sig_bytes];
 		for (int j=0;j<sig_bytes; j++){
-			exc[j] = 0;
+			neq.exc[j] = 0;
 		}
-		exc[i/8] = 1 << (i % 8);
-		sprintf(neq.rep, "%d", vals[i]);
+		neq.exc[i/8] = 1 << (i % 8);
+		mpfr_snprintf(neq.rep, MAX_EQN_SIZE, "%.2f", neq.eval);
 		neq.rep[MAX_EQN_SIZE-1] = '\0';
 		neq.next = eqnh;
 		eqnh = &neq;
-		res[i] = struct eqn *a;
+		res[i] = NULL;
 	}
 	res[0] = eqnh;
 

@@ -1,15 +1,16 @@
 #ifndef FOURS_H
 #define FOURS_H
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <mpfr.h>
 
 #define MAX_OP_STR 32
 #define MAX_EQN_SIZE 256
+#define MAX_INP 64
 #define PRECISION 64
 
-mpfr_rnd_t rnd = MPFR_RNDN;
-mpfr_prec_t prec = PRECISION;
+mpfr_rnd_t rnd;
+mpfr_prec_t prec;
 
 typedef struct bi_op{
 	char rep[MAX_OP_STR];

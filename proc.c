@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <mpfr.h>
+
 #include "fours.h"
 
 int check_exclusive(struct eqn *a, struct eqn *b){

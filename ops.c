@@ -1,4 +1,8 @@
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <mpfr.h>
+
 #include "fours.h"
 
 void add_bi_op(char* rep, void(*opfunc)(mpfr_t, mpfr_t, mpfr_t)){
